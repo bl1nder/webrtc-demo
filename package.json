@@ -4,7 +4,7 @@
   "description": "Stuff for presentation",
   "main": "index.js",
   "scripts": {
-    "start-broadcast": "cd g && node server.js",
+    "start": "cd g && node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ilya Rachinskiy",
