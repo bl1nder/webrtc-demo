@@ -1,0 +1,41 @@
+# Пропишем версию
+version: '3.3'
+# Перечислим сервисы
+services:
+    nginx:
+# Пропишем какой образ мы хотим использовать
+        image: nginx:latest
+# Назовем свой контейнер по красивому
+        container_name: nginx
+# Проброс портов
+        ports:
+            - "8080:80"
+            - "4435:443"
+            - "1234:1234"
+# Проброс папок
+        volumes:
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+            - ./Nginx/core:/etc/nginx/conf.d
+            - ./Nginx/www:/var/www/
+            - ./Nginx/Logs:/var/log/nginx/
+            - ./Nginx/html:/usr/share/nginx/html/
+            - ./nginx.crt:/etc/nginx/ssl/nginx.crt
+            - ./nginx.key:/etc/nginx/ssl/nginx.key
+            - ./install-node.sh:/install-node.sh
+        # command:
+        #     - /install-node.sh
+# # Укажем зависимости
+#         links:
+#             - php
+    node:
+        build:
+            context: ./docker/node
+            args:
+                - NODE_VERSION=latest
+                - PROJECT_PATH=/opt/app/
+                - NODE_ENV=production
+                - YARN=false
+        volumes:
+            - ./:/opt/app
+        # entrypoint: run-nodock "node index.js"
+        tty: true

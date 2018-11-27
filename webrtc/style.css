@@ -1,0 +1,8 @@
+.video-panel{
+    display: flex;
+}
+.video-panel__video{
+    border:1px solid black;
+    margin:50px;
+    padding: 0px 50px;
+}

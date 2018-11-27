@@ -1,0 +1,17 @@
+{
+  "name": "jstgnweekends",
+  "version": "1.0.0",
+  "description": "Stuff for presentation",
+  "main": "index.js",
+  "scripts": {
+    "start-broadcast": "cd g && node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ilya Rachinskiy",
+  "license": "ISC",
+  "dependencies": {
+    "node-static": "^0.7.11",
+    "signal-fire": "^0.5.3",
+    "socket.io": "^2.1.1"
+  }
+}

@@ -1,0 +1,75 @@
+<div id="status"></div>
+<video controls="true" muted autoplay playsinline></video>
+<button id="play"> play</button>
+<video class="video-review" controls="1" autoplay="1" muted src="https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4">
+</video>
+<button class="torch"></button>
+<script>
+    let status = document.querySelector('#status');
+    let playBtn = document.querySelector('#play');
+    const video = document.querySelector('video');
+
+    addText('init');
+
+    const listener = () => {
+
+        addText('video play');
+        let supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
+        let constraintList = document.getElementById("constraintList");
+        addText('Constraints start- ');
+        addText(JSON.stringify(supportedConstraints));
+        addText('Constraints finish');
+
+        navigator.getUserMedia({
+            video: true
+        }).then((stream) => {
+
+            video.srcObject = stream;
+            addText('started');
+            video.play().then(x => {
+                addText('Ok');
+                addText(JSON.stringify(x));
+
+            }).catch(y => {
+                addText('some Problem')
+                addText(JSON.stringify(y));
+
+            });
+            // get the active track of the stream
+            const track = stream.getVideoTracks()[0];
+            video.addEventListener('loadedmetadata', (e) => {
+                addText('loadedmetadata')
+                window.setTimeout(() => (
+                    onCapabilitiesReady(track.getCapabilities())
+                ), 500);
+            });
+
+            function onCapabilitiesReady(capabilities) {
+                addText('onCapabilitiesReady');
+
+                if (capabilities.torch) {
+                    track.applyConstraints({
+                        advanced: [{ torch: true }]
+                    })
+                        .catch(e => console.log(e));
+                }
+
+
+            }
+
+        })
+            .catch(err => {
+                addText('!!!!!!EEEERRRROR!!!');
+                addText(err);
+
+                console.error('getUserMedia() failed: ', err)
+            });
+
+    }
+    playBtn.addEventListener('click', listener, true);
+
+
+    function addText(text) {
+        status.innerText += ' ' + text;
+    }
+</script>

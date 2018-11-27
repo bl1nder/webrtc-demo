@@ -1,0 +1,40 @@
+<script src="/socket.io/socket.io.js"></script>
+<script src="peerManager.js"></script>
+<script src="callManager.js"></script>
+<script src="app.js"></script>
+<link rel="stylesheet" href="style.css">
+<span>Video chat</span>
+<div class="video-panel">
+
+	<div class="video-panel__video video-panel__video--local">
+		<h2>local</h2>
+		<video id="localVideo" style="width:200px;height:200px" autoplay muted></video>
+
+	</div>
+	<div class="video-panel__video video-panel__video--remote">
+		<h2>remote</h2>
+		<video id="remoteVideo" style="width:200px;height:200px" autoplay muted></video>
+
+	</div>
+</div>
+<div style="display: flex;flex-direction: column; width :200px">
+	<div id="chat" style="width:200px;overflow: auto"></div>
+	<select id="userlist" size="5"></select>
+	<input type="text" id="message">
+	<!-- <input type="text" id="to"> -->
+	<div style="display:flex; justify-content:flex-end;">
+		<button id="sendBtn">SEND</button>
+		<button id="callButton">offer</button>
+		<button id="acceptButton">accept</button>
+
+	</div>
+</div>
+<script>
+	const IO_SERVER = 'http://localhost:1234';
+	var manager = new PeerManager();
+	var callManager = new CallManager();
+	manager.ping()
+	const app = new App();
+	app.start();
+
+</script>

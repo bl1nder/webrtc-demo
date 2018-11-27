@@ -1,0 +1,67 @@
+<div id="status"></div>
+<button class="switch">torch</button>
+<video controls="true" muted autoplay playsinline></video>
+<button id="play"> play</button>
+<video class="video-review" controls="1" autoplay="1" muted src="https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4">
+</video>
+<button class="torch"></button>
+<script>
+    navigator.getUserMedia = navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia;
+
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: 'user', width: 1280, height: 720 } },
+            function (stream) {
+                debugger;
+                const track = stream.getVideoTracks()[0];
+                const imageCapture = new ImageCapture(track)
+                const photoCapabilities = imageCapture.getPhotoCapabilities().then(() => {
+
+                    //todo: check if camera has a torch
+
+                    //let there be light!
+                    const btn = document.querySelector('.switch');
+                    btn.addEventListener('click', function () {
+                        track.applyConstraints({
+                            advanced: [{ torch: true }]
+                        });
+                    });
+                });
+
+
+
+
+                var video = document.querySelector('video');
+                const track = stream.getVideoTracks()[0];
+
+                video.srcObject = stream;
+                video.onloadedmetadata = function (e) {
+                    video.play();
+                    window.setTimeout(() => (
+                        onCapabilitiesReady(track.getCapabilities())
+                    ), 500);
+                    console.log(JSON.stringify(e))
+                };
+                function onCapabilitiesReady(capabilities) {
+
+                    if (capabilities.torch) {
+                        track.applyConstraints({
+                            advanced: [{ torch: true }]
+                        })
+                            .catch(e => console.log(e));
+                    }
+
+
+                }
+
+            },
+            function (err) {
+                console.log("The following error occurred: " + err.name);
+            }
+        );
+
+    } else {
+        console.log("getUserMedia not supported");
+    }
+</script>
